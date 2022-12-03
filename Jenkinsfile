@@ -80,3 +80,5 @@ pipeline {
         sh(script: './mvnw --batch-mode package -DskipTests')
       }
     }
+  }
+}
