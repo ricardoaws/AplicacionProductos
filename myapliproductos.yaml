@@ -1,0 +1,49 @@
+# Creamos el manifiesto para desplegar los pods en el cluster de kubernetes
+---
+# Deployment de kubernetes con nombre myapliproductos dentro del namespace default
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapliproductos
+  name: myapliproductos
+# Indicamos el numero de replicas de pod a desplegar, el pod que será aplicado con el deployment, la etiqueta del pod
+# que se despliega y la imagen de DockerHub que se despliega.
+# Con imagePullPolicy: Always estamos indicando que cada vez que kubernetes descarga y lanza un contenedor,
+# busca la imagen en el registro (DockerHub)
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapliproductos
+  template:
+    metadata:
+      labels:
+        app: myapliproductos
+    spec:
+      containers:
+      - image: dgm83/aplicacionproductossecurizada:22
+        imagePullPolicy: Always
+        name: myapliproductos
+
+---
+# Creación del servicio para que los pods se puedan comunicar con el exterior o con otros pods
+# El tipo de servicio es Nodeport y el puerto de comunicación será el 30001
+# Se realiza un forward al puerto en el que escucha realmente el pod (8080)
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myapliproductos
+  name: myapliproductos
+spec:
+  ports:
+  - nodePort: 30001
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: myapliproductos
+  type: NodePort
+
