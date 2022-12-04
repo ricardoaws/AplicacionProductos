@@ -22,7 +22,7 @@ spec:
         app: myapliproductos
     spec:
       containers:
-      - image: dgm83/aplicacionproductossecurizada:22
+      - image: awsricardo/aplicacion:95
         imagePullPolicy: Always
         name: myapliproductos
 
